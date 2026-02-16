@@ -1,11 +1,11 @@
-name: Publish HiHello to PyPI
+name: HiHello Publish
 
-# 手動トリガーも可能
+# タグ push でも、手動起動でも実行可能
 on:
-  workflow_dispatch: {}   # 手動起動用
+  workflow_dispatch: {}       # 手動起動
   push:
     tags:
-      - 'v*'  # タグ push でも自動実行
+      - 'v*'                 # v0.1.1 のようなタグ push でも実行
 
 jobs:
   publish:
@@ -13,41 +13,41 @@ jobs:
 
     steps:
       # コード取得
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Python環境構築
-      - name: Set up Python
+      # Python 3.11 環境
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      # pip とビルドツールのインストール
-      - name: Upgrade pip and install tools
+      # pip 更新 & ビルド/テストツール導入
+      - name: Install build tools
         run: |
           python -m pip install --upgrade pip
           pip install build twine pytest
 
-      # ローカルで editable インストール
-      - name: Install package
+      # dist/ クリーン（古いビルド削除）
+      - name: Clean dist directory
+        run: rm -rf dist/*
+
+      # ライブラリを editable モードでインストール
+      - name: Install HiHello
         run: pip install -e .
 
-      # 確認用 Python パス
-      - name: Verify Python path
-        run: python -c "import sys; print(sys.path)"
-
-      # テスト実行（強制起動でも安定）
+      # PYTHONPATH 設定して pytest 実行
       - name: Run tests
         working-directory: ${{ github.workspace }}
         run: |
           export PYTHONPATH=$PYTHONPATH:${GITHUB_WORKSPACE}
           pytest tests/ -v
 
-      # ビルド
+      # パッケージビルド
       - name: Build package
         run: python -m build
 
-      # PyPI公開
+      # PyPI へ公開
       - name: Publish to PyPI
         env:
           TWINE_USERNAME: __token__
