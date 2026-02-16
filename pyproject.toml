@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name ="HiHello"
 version = "0.1.0"
 description = "Simple HiHello responder library"
-authors = [{name="oywe", email="example@example.com"}]
+authors = [{name="Oywe", email="ncql@proton.me"}]
 readme = "README.md"
 requires-python = ">=3.8"
 license = {text = "MIT"}
