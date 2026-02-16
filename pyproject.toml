@@ -1,0 +1,12 @@
+[build-system]
+requires = ["setuptools>=65.5.1", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name ="HiHello"
+version = "0.1.0"
+description = "Simple HiHello responder library"
+authors = [{name="oywe", email="example@example.com"}]
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
